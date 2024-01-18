@@ -1,0 +1,37 @@
+version: '3.8'
+
+networks:
+  servers_network:
+    driver: bridge
+
+services:
+  loadbalancer:
+    image: nginx:alpine
+    container_name: loadbalancer
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+    ports:
+      - "8080:80"
+    networks:
+      - servers_network
+
+  webserver1:
+    image: nginx:alpine
+    container_name: webserver1
+    ports:
+      - "8081:80"
+    volumes:
+      - ./server1/index.html:/usr/share/nginx/html/index.html
+    networks:
+      - servers_network
+
+  webserver2:
+    image: nginx:alpine
+    container_name: webserver2
+    ports:
+      - "8082:80"    
+    volumes:
+      - ./server2/index.html:/usr/share/nginx/html/index.html
+    networks:
+      - servers_network
+
